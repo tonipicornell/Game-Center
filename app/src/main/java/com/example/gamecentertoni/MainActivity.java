@@ -1,5 +1,6 @@
 package com.example.gamecentertoni;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -31,7 +32,19 @@ public class MainActivity extends AppCompatActivity {
         loadingGif = findViewById(R.id.gif_loading);
         Glide.with(this).asGif().load(R.drawable.loading).into(loadingGif);
 
+        // Iniciar la animación del titulo:
         startAnimation();
+
+        // Iniciar el cambio de actividad despues de 10 segundos a SignIn
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(MainActivity.this, SignIn.class);
+
+            // Iniciar la actividad de SignIn:
+            startActivity(intent);
+
+            // Finalizar la actividad de MainActivity:
+            finish();
+        }, 10000);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

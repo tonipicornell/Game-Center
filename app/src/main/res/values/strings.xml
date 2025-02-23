@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Game Center Toni</string>
     <string name="title_game_text">Toni\'s Game Center</string>
+    <string name="user_text">Username</string>
+    <string name="sign_in_text">Sign In</string>
+    <string name="password_text">Password</string>
+    <string name="enter_username_text">Enter the username</string>
+    <string name="enter_password_text">Enter the password</string>
+    <string name="create_account_text">Do you have a user account? \n If you don\'t have an account, \n click on the text to create a new one</string>
 </resources>
