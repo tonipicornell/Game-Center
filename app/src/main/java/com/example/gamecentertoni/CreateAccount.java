@@ -42,6 +42,11 @@ public class CreateAccount extends AppCompatActivity {
 
         haveAccountText = findViewById(R.id.create_new_account);
 
+        createAccountButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateAccount.this, SignIn.class);
+            startActivity(intent);
+        });
+
         haveAccountText.setOnClickListener(v -> {
             Intent intent = new Intent(CreateAccount.this, SignIn.class);
             startActivity(intent);

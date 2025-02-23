@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InitialGame2048"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/title_initial_game2048"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_game2048"
+        android:textColor="@color/white"
+        android:textSize="20pt"
+        android:gravity="center"
+        android:layout_marginTop="50dp"/>
+
+    <LinearLayout
+        android:id="@+id/functions_game2048"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="70dp"
+        android:layout_below="@+id/title_initial_game2048"
+        android:layout_centerInParent="true">
+
+        <Button
+            android:id="@+id/play_game2048"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="@string/play_game"
+            android:textSize="25dp"
+            android:backgroundTint="@color/grey"/>
+
+        <Button
+            android:id="@+id/statics_game2048"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="@string/global_statics"
+            android:textSize="25dp"
+            android:backgroundTint="@color/grey"
+            android:layout_marginTop="15dp"/>
+
+        <Button
+            android:id="@+id/exit_game2048"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="@string/exit_game"
+            android:textSize="25dp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/grey"
+            android:layout_marginTop="15dp"/>
+    </LinearLayout>
+
+</RelativeLayout>
