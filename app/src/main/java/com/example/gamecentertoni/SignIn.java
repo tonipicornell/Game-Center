@@ -32,6 +32,11 @@ public class SignIn extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_button);
         createAccount = findViewById(R.id.create_new_account);
 
+        signInButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SignIn.this, GameCenter.class);
+            startActivity(intent);
+        });
+
         // Si pulsas encima del texto te manda a la actividad CreateAccount
         createAccount.setOnClickListener(v -> {
             Intent intent = new Intent(SignIn.this, CreateAccount.class);
