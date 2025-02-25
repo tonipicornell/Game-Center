@@ -19,4 +19,7 @@
     <color name="green">#00FA9A</color>
     <color name="dark_green">#3CB371</color>
 
+    <color name="tablero">#BBADA0</color>
+    <color name="button_previous">#F2AA74</color>
+    <color name="button_restart">#D99B72</color>
 </resources>

@@ -13,13 +13,16 @@
         android:theme="@style/Theme.GameCenterToni"
         tools:targetApi="31">
         <activity
+            android:name=".game2048"
+            android:exported="false" />
+        <activity
             android:name=".Breakout"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".VistaWin"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".InitialGame2048"
             android:exported="false"

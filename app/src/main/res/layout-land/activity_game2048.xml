@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp"
+    tools:context=".game2048">
+
+    <LinearLayout
+        android:id="@+id/title_score_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/title_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/name_title"
+            android:textSize="30pt"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/fondo_celda"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/puntuation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_puntuation"
+            android:textColor="@color/black"
+            android:textSize="15pt"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/fondo_score"/>
+
+        <TextView
+            android:id="@+id/maximum_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/maximum_puntacion_fondo"
+            android:text="@string/best_puntuation"
+            android:textColor="@color/white"
+            android:textSize="15pt"/>
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/tablero"
+        android:layout_width="325dp"
+        android:layout_height="325dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignTop="@+id/title_score_max"
+        android:layout_toEndOf="@+id/title_score_max"
+        android:layout_marginStart="120dp"
+        android:background="@color/tablero"
+        android:columnCount="4"
+        android:rowCount="4">
+
+    </GridLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@+id/tablero"
+        android:layout_alignTop="@+id/tablero"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp">
+
+        <Button
+            android:id="@+id/return_previous_play"
+            android:layout_width="140dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/previous_play"
+            android:backgroundTint="@color/button_previous"
+            android:visibility="visible"/>
+
+
+        <Button
+            android:id="@+id/button_reset_game"
+            android:layout_width="140dp"
+            android:layout_height="55dp"
+            android:text="@string/restart_game"
+            android:backgroundTint="@color/button_restart"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"/>
+    </LinearLayout>
+</RelativeLayout>

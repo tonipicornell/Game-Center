@@ -26,4 +26,10 @@
 
     <string name="new_game">New Game</string>
     <string name="message_win_text">You win the break out!</string>
+
+    <string name="text_puntuation">Score: 0</string>
+    <string name="name_title">2048</string>
+    <string name="restart_game">Restart Game</string>
+    <string name="previous_play">Previous Play</string>
+    <string name="best_puntuation">Best: 0</string>
 </resources>
