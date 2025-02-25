@@ -23,4 +23,7 @@
     <string name="play_game">Play Game</string>
     <string name="title_game2048">2048</string>
     <string name="exit_game">Exit Game</string>
+
+    <string name="new_game">New Game</string>
+    <string name="message_win_text">You win the break out!</string>
 </resources>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Breakout"
+    android:background="@color/dark_blue">
+
+    <LinearLayout
+        android:id="@+id/top_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <ImageButton
+            android:id="@+id/play_pause_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            app:tint="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="12pt"
+            android:layout_marginStart="15dp" />
+
+        <TextView
+            android:id="@+id/title_game"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="BREAKOUT"
+            android:textColor="@color/white"
+            android:textSize="12pt"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="@color/white"
+            android:textSize="12pt"
+            android:layout_marginEnd="15dp"/>
+
+        <ImageButton
+            android:id="@+id/restart_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/restart"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            app:tint="@android:color/white"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/game"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_information" />
+
+    <TextView
+        android:id="@+id/pause_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paused Game"
+        android:textColor="@color/red"
+        android:textSize="12pt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="190dp"
+        android:layout_below="@id/top_information"
+        android:visibility="gone"/>
+
+</RelativeLayout>

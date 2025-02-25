@@ -26,6 +26,11 @@ public class InitialBreakout extends AppCompatActivity {
         globalStaticsBreakout = findViewById(R.id.statics_breakout);
         exitBreakout = findViewById(R.id.exit_breakout);
 
+        playBreakout.setOnClickListener(v -> {
+            Intent intent = new Intent(InitialBreakout.this, Breakout.class);
+            startActivity(intent);
+        });
+
         // Pulsando en el botón de "Exit Game" sales a la actividad GameCenter
         exitBreakout.setOnClickListener(v -> {
             Intent intent = new Intent(InitialBreakout.this, GameCenter.class);

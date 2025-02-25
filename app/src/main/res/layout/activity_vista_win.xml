@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VistaWin"
+    android:background="@color/dark_blue">
+
+    <LinearLayout
+        android:id="@+id/buttons_win"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/message_win"
+        android:layout_marginBottom="50dp">
+
+        <Button
+            android:id="@+id/exit_game_button"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="136dp"
+            android:text="@string/exit_game"
+            android:textColor="@color/red"
+            android:textSize="7pt"
+            android:backgroundTint="@color/grey"/>
+
+        <Button
+            android:id="@+id/new_game_button"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="@string/new_game"
+            android:textSize="7pt"
+            android:backgroundTint="@color/grey"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/message_win"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_win_text"
+        android:textColor="@color/white"
+        android:textSize="20pt"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:id="@+id/information_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/message_win"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="150dp"
+            android:layout_height="90dp"
+            android:text="    Time \n    00:00"
+            android:textColor="@color/white"
+            android:textSize="15pt"
+            android:background="@drawable/fondo_texto_win"
+            android:layout_marginRight="136dp"/>
+
+        <TextView
+            android:id="@+id/score_win"
+            android:layout_width="150dp"
+            android:layout_height="90dp"
+            android:text="   Score \n    6250"
+            android:background="@drawable/fondo_texto_win"
+            android:textColor="@color/white"
+            android:textSize="15pt" />
+    </LinearLayout>
+</RelativeLayout>

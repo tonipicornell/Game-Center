@@ -3,4 +3,20 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#959595</color>
+
+    <color name="dark_blue">#00004b</color>
+
+    <color name="gold">#FFD700</color>
+    <color name="blue_violet">#8A2BE2</color>
+    <color name="coral">#FF7F50</color>
+    <color name="blue">#0000FF</color>
+    <color name="orange">#FFA500</color>
+    <color name="red">#FF0000</color>
+    <color name="violet">#EE82EE</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="turquoise">#AFEEEE</color>
+    <color name="green">#00FA9A</color>
+    <color name="dark_green">#3CB371</color>
+
 </resources>
