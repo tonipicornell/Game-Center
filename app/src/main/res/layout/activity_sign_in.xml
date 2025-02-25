@@ -64,7 +64,8 @@
             android:textColorHint="@color/black"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:background="@drawable/background_edit_text"/>
+            android:background="@drawable/background_edit_text"
+            android:inputType="textPassword"/>
 
         <Button
             android:id="@+id/sign_in_button"
