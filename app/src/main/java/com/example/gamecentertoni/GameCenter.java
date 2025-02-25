@@ -1,5 +1,6 @@
 package com.example.gamecentertoni;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,6 +33,16 @@ public class GameCenter extends AppCompatActivity {
         game2048Image = findViewById(R.id.game2048_button);
 
         activeUsersButton = findViewById(R.id.see_active_users);
+
+        breakoutImage.setOnClickListener(v -> {
+            Intent intent = new Intent(GameCenter.this, InitialBreakout.class);
+            startActivity(intent);
+        });
+
+        game2048Image.setOnClickListener(v -> {
+            Intent intent = new Intent(GameCenter.this, InitialGame2048.class);
+            startActivity(intent);
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
