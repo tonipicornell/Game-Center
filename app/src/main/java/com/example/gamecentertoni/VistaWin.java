@@ -45,7 +45,12 @@ public class VistaWin extends AppCompatActivity {
 
         // Configuración al presionar el boton de "Exit Game":
         exitGame.setOnClickListener(view -> {
-            // Creo un intent para salir de la actividad actual:
+            Intent exitGameIntent = new Intent(VistaWin.this, GameCenter.class);
+
+            // Arrancar la actividad:
+            startActivity(exitGameIntent);
+
+            // Cerrar la actividad actual
             finish();
         });
 
