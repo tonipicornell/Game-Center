@@ -195,6 +195,8 @@ public class game2048 extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Exit Game").setMessage("Do you want to exit the game?").setPositiveButton("YES", (dialog, which) -> {
                 Intent intent = new Intent(game2048.this, InitialGame2048.class);
+                intent.putExtra("USERNAME", username);
+                intent.putExtra("USER_ID", idUsuarioActual);
                 startActivity(intent);
 
                 finish();
