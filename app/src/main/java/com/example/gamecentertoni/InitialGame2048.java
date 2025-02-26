@@ -36,6 +36,14 @@ public class InitialGame2048 extends AppCompatActivity {
             game2048Intent.putExtra("USER_ID", userId);
             startActivity(game2048Intent);
         });
+
+        staticsGlobal2048.setOnClickListener(v -> {
+            Intent staticsGlobal2048 = new Intent(InitialGame2048.this, game2048.class);
+            staticsGlobal2048.putExtra("USERNAME", username);
+            staticsGlobal2048.putExtra("USER_ID", userId);
+            startActivity(staticsGlobal2048);
+        });
+
         // Si pulsas en el botón de "Exit Game" sales a la actividad GameCenter
         exitGame2048.setOnClickListener(v -> {
             Intent exitGameIntent = new Intent(InitialGame2048.this, GameCenter.class);

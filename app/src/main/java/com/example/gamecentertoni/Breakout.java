@@ -59,19 +59,14 @@ public class Breakout extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this);
         mSessionManager = new SessionManager(this);
 
+        Intent intentInfo = getIntent();
+        String username = intentInfo.getStringExtra("USERNAME");
+        idUsuarioActual = intentInfo.getIntExtra("USER_ID", -1);
+
         // Comprobar que el usuario está loggeado:
-        if (mSessionManager.isLoggedIn()) {
-            idUsuarioActual = mSessionManager.getUserId();
-        } else {
-            // Si no está logeado, se manda a la actividad SignIn:
-            Toast.makeText(this, "Please login to play game", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(Breakout.this, SignIn.class);
-            startActivity(intent);
-
-            // Finalizar actividad actual:
+        if (username == null || idUsuarioActual == -1) {
+            Toast.makeText(this, "Error: Usuario no encontrado", Toast.LENGTH_SHORT).show();
             finish();
-
             return;
         }
 
@@ -144,13 +139,9 @@ public class Breakout extends AppCompatActivity {
     }
 
     // Método para guardar las estadísticas del juego:
-    public void saveGameStats() {
-        // Obtener el tiempo actual:
-        String timeSpent = getTimeCurrently();
-
+    public void saveGameStats(int puntuacion, String tiempo) {
         // Guardar la puntuación y el tiempo en la base de datos:
-        mDatabaseHelper.addBreakoutStats(idUsuarioActual, puntuacionActual, timeSpent);
-
+        mDatabaseHelper.addBreakoutStats(idUsuarioActual, puntuacion, tiempo);
         Toast.makeText(this, "Game saved!", Toast.LENGTH_SHORT).show();
     }
 
@@ -246,29 +237,6 @@ public class Breakout extends AppCompatActivity {
         plasmarJuego.resume();
         cronometroCorriendo = true;
         iniciarCronometro();
-    }
-
-    // Método para cuando finaliza la partida
-    public void endGame() {
-        // Parar el juego:
-        plasmarJuego.pause();
-        detenerCronometro();
-
-        // Guardar estadísticas:
-        saveGameStats();
-
-        // SI piedes sale un dialogo:
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Game Over").setMessage("Your score: " + puntuacionActual)
-                .setPositiveButton("Play Again", (dialog, which) -> {
-                    reiniciarPartida();
-                })
-                .setNegativeButton("Return to Menu", (dialog, which) -> {
-                    finish();
-                })
-                .setCancelable(false)
-                .show();
-
     }
 
     // Método para pausar el juego:
