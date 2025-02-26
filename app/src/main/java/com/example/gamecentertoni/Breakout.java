@@ -1,11 +1,13 @@
 package com.example.gamecentertoni;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -21,6 +23,14 @@ public class Breakout extends AppCompatActivity {
     private static final String MESSAGE_RESTART_GAME = "Are you sure you want to restart the game?"; // Mensaje del dialogo
     private static final String RESTART_POSITIVE_BUTTON = "YES"; // Botón positivo del dialogo.
     private static final String RESTART_NEGATIVE_BUTTON = "NO"; // Botoón negativo del dialogo.
+
+    // Base de datos:
+    private DatabaseHelper mDatabaseHelper;
+    private SessionManager mSessionManager;
+
+    // Variables base de datos:
+    private int idUsuarioActual;
+    private int puntuacionActual = 0;
 
     // CONSTANTES PARA ASIGNARLE A VARIABLES:
     private VistaJuego plasmarJuego;
@@ -45,6 +55,25 @@ public class Breakout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_breakout);
+
+        mDatabaseHelper = new DatabaseHelper(this);
+        mSessionManager = new SessionManager(this);
+
+        // Comprobar que el usuario está loggeado:
+        if (mSessionManager.isLoggedIn()) {
+            idUsuarioActual = mSessionManager.getUserId();
+        } else {
+            // Si no está logeado, se manda a la actividad SignIn:
+            Toast.makeText(this, "Please login to play game", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(Breakout.this, SignIn.class);
+            startActivity(intent);
+
+            // Finalizar actividad actual:
+            finish();
+
+            return;
+        }
 
         // Creo una nueva instancia de VistaJuego.java:
         plasmarJuego = new VistaJuego(this);
@@ -114,10 +143,23 @@ public class Breakout extends AppCompatActivity {
         });
     }
 
+    // Método para guardar las estadísticas del juego:
+    public void saveGameStats() {
+        // Obtener el tiempo actual:
+        String timeSpent = getTimeCurrently();
+
+        // Guardar la puntuación y el tiempo en la base de datos:
+        mDatabaseHelper.addBreakoutStats(idUsuarioActual, puntuacionActual, timeSpent);
+
+        Toast.makeText(this, "Game saved!", Toast.LENGTH_SHORT).show();
+    }
+
     // Método para actualizar la puntuación:
     public void actualizarPuntuacion(int puntuacionActualizada) {
+        this.puntuacionActual = puntuacionActualizada;
+
         runOnUiThread(() -> {
-            runOnUiThread(() -> puntuacionPartida.setText(String.valueOf(puntuacionActualizada)));
+            puntuacionPartida.setText(String.valueOf(puntuacionActualizada));
         });
     }
 
@@ -204,6 +246,29 @@ public class Breakout extends AppCompatActivity {
         plasmarJuego.resume();
         cronometroCorriendo = true;
         iniciarCronometro();
+    }
+
+    // Método para cuando finaliza la partida
+    public void endGame() {
+        // Parar el juego:
+        plasmarJuego.pause();
+        detenerCronometro();
+
+        // Guardar estadísticas:
+        saveGameStats();
+
+        // SI piedes sale un dialogo:
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Game Over").setMessage("Your score: " + puntuacionActual)
+                .setPositiveButton("Play Again", (dialog, which) -> {
+                    reiniciarPartida();
+                })
+                .setNegativeButton("Return to Menu", (dialog, which) -> {
+                    finish();
+                })
+                .setCancelable(false)
+                .show();
+
     }
 
     // Método para pausar el juego:

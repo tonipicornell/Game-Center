@@ -1,5 +1,6 @@
 package com.example.gamecentertoni;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -22,6 +24,10 @@ import java.util.List;
 import java.util.Random;
 
 public class game2048 extends AppCompatActivity {
+
+    private DatabaseHelper mDatabaseHelper;
+    private SessionManager mSessionManager;
+    private int idUsuarioActual;
 
     private GridLayout tableroJuego; // Tablero del 2048
     private TextView[][] celdas; // Celdas del tablero
@@ -39,6 +45,7 @@ public class game2048 extends AppCompatActivity {
     // Botones para disfrutar del juego:
     private Button previousPlay; // Boton para volver a la jugada anterior.
     private Button restartGame; // Boton para reiniciar el juego.
+    private Button exitGame;
 
     // Array bidimensional para almacenar la última jugada:
     private String[][] anteriorJugada = new String[4][4]; // Este array es 4x4, como el tablero
@@ -49,9 +56,40 @@ public class game2048 extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game2048);
 
+        mDatabaseHelper = new DatabaseHelper(this);
+        mSessionManager = new SessionManager(this);
+
+        // Comprobar si el usuario ha iniciado la sesion:
+        if (mSessionManager.isLoggedIn()) {
+            idUsuarioActual = mSessionManager.getUserId();
+        } else {
+            // Si no esta logeado, redirigir a la pantalla de inicio:
+            Toast.makeText(this, "Please login to play", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(game2048.this, SignIn.class);
+
+            startActivity(intent);
+
+            // Finalizar la actividad actual
+            finish();
+
+            return;
+        }
+
         tableroJuego = findViewById(R.id.tablero);
         puntuacionTextView = findViewById(R.id.puntuation);
         maximaPuntacionTextView = findViewById(R.id.maximum_score);
+
+        // Hacer aparecer su máxima puntuación obtenida:
+        int highScoreUser = mDatabaseHelper.getHighest2048Score(idUsuarioActual);
+
+        if (highScoreUser > 0) { // Verifica si la puntuación obtenida es mayor que 0
+            maximaPuntuacion = highScoreUser;
+        } else {
+            maximaPuntuacion = 0; // Si no hay puntuaciones registradas, empieza desde 0
+        }
+
+        maximaPuntacionTextView.setText("Best: " + maximaPuntuacion);
+
 
         // El tablero será un 4x4:
         celdas = new TextView[4][4];
@@ -59,6 +97,7 @@ public class game2048 extends AppCompatActivity {
         // Declaración del los botones para el juego:
         previousPlay = findViewById(R.id.return_previous_play); // Volver a la jugada anterior.
         restartGame = findViewById(R.id.button_reset_game); // Reiniciar el juego.
+        exitGame = findViewById(R.id.button_exit_game);
 
         // Inicio el tablero:
         inicioTablero();
@@ -153,6 +192,20 @@ public class game2048 extends AppCompatActivity {
             builder.show();
         });
 
+        exitGame.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Exit Game").setMessage("Do you want to exit the game?").setPositiveButton("YES", (dialog, which) -> {
+                Intent intent = new Intent(game2048.this, InitialGame2048.class);
+                startActivity(intent);
+
+                finish();
+            }).setNegativeButton("Cancel", (dialog, which) -> {
+                dialog.dismiss();
+            });
+
+            builder.show();
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -214,6 +267,20 @@ public class game2048 extends AppCompatActivity {
 
         // Actualizo los colores despues de restaurar las celdas:
         actualizarCeldaColores();
+    }
+
+    // Método para guardar las estadísticas del juego:
+    private void saveGameStats() {
+        // Calcular el tiempo jugado:
+        String timeSpent = "00:00";
+
+        // Guardar las estadisticas del juego en la base de datos:
+        mDatabaseHelper.add2048Stats(idUsuarioActual, puntuacion, timeSpent);
+
+        if (puntuacion > maximaPuntuacion) {
+            maximaPuntuacion = puntuacion;
+            maximaPuntacionTextView.setText("Best: " + maximaPuntuacion);
+        }
     }
 
     // Método para iniciar el tablero de juego
@@ -454,6 +521,9 @@ public class game2048 extends AppCompatActivity {
 
     // Método para llamar al dialogo de derrota;
     private void dialagoDerrota() {
+        // Guardar estadísticas del juego en la base de datos:
+        saveGameStats();
+        
         // Almacenamos la puntuacion antes de reiniciar:
         almacenarPuntuacion.add(puntuacion);
 
