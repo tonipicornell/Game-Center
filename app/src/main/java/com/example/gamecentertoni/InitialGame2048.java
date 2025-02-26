@@ -25,15 +25,23 @@ public class InitialGame2048 extends AppCompatActivity {
         playGame2048 = findViewById(R.id.play_game2048);
         staticsGlobal2048 = findViewById(R.id.statics_game2048);
         exitGame2048 = findViewById(R.id.exit_game2048);
+        Intent intent = getIntent();
+
+        String username = intent.getStringExtra("USERNAME");
+        int userId = intent.getIntExtra("USER_ID", -1);
 
         playGame2048.setOnClickListener(v -> {
-            Intent intent = new Intent(InitialGame2048.this, game2048.class);
-            startActivity(intent);
+            Intent game2048Intent = new Intent(InitialGame2048.this, game2048.class);
+            game2048Intent.putExtra("USERNAME", username);
+            game2048Intent.putExtra("USER_ID", userId);
+            startActivity(game2048Intent);
         });
         // Si pulsas en el botón de "Exit Game" sales a la actividad GameCenter
         exitGame2048.setOnClickListener(v -> {
-            Intent intent = new Intent(InitialGame2048.this, GameCenter.class);
-            startActivity(intent);
+            Intent exitGameIntent = new Intent(InitialGame2048.this, GameCenter.class);
+            exitGameIntent.putExtra("USERNAME", username);
+            exitGameIntent.putExtra("USER_ID", userId);
+            startActivity(exitGameIntent);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

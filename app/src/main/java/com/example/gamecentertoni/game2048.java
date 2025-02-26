@@ -2,6 +2,7 @@ package com.example.gamecentertoni;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -19,8 +20,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class game2048 extends AppCompatActivity {
@@ -59,25 +63,20 @@ public class game2048 extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this);
         mSessionManager = new SessionManager(this);
 
-        // Comprobar si el usuario ha iniciado la sesion:
-        if (mSessionManager.isLoggedIn()) {
-            idUsuarioActual = mSessionManager.getUserId();
-        } else {
-            // Si no esta logeado, redirigir a la pantalla de inicio:
-            Toast.makeText(this, "Please login to play", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(game2048.this, SignIn.class);
-
-            startActivity(intent);
-
-            // Finalizar la actividad actual
-            finish();
-
-            return;
-        }
 
         tableroJuego = findViewById(R.id.tablero);
         puntuacionTextView = findViewById(R.id.puntuation);
         maximaPuntacionTextView = findViewById(R.id.maximum_score);
+
+        Intent intentInfo = getIntent();
+        String username = intentInfo.getStringExtra("USERNAME");
+        idUsuarioActual = intentInfo.getIntExtra("USER_ID", -1);
+
+        if (username == null || idUsuarioActual == -1) {
+            Toast.makeText(this, "Error: Usuario no encontrado", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Hacer aparecer su máxima puntuación obtenida:
         int highScoreUser = mDatabaseHelper.getHighest2048Score(idUsuarioActual);
@@ -270,17 +269,33 @@ public class game2048 extends AppCompatActivity {
     }
 
     // Método para guardar las estadísticas del juego:
-    private void saveGameStats() {
-        // Calcular el tiempo jugado:
-        String timeSpent = "00:00";
-
-        // Guardar las estadisticas del juego en la base de datos:
-        mDatabaseHelper.add2048Stats(idUsuarioActual, puntuacion, timeSpent);
-
-        if (puntuacion > maximaPuntuacion) {
-            maximaPuntuacion = puntuacion;
-            maximaPuntacionTextView.setText("Best: " + maximaPuntuacion);
+    public void saveGameStats(int userId, int score) {
+        if (userId <= 0) {
+            Log.e("DatabaseError", "Invalid user ID: " + userId);
+            Toast.makeText(this, "Cannot save score: invalid user session", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        String currentTime = getCurrentTime();
+
+        try {
+            long result = dbHelper.add2048Stats(userId, score, currentTime);
+            if (result != -1) {
+                Toast.makeText(this, "Puntuación guardada", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al guardar la puntuación", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error al guardar la puntuación: " + e.getMessage(), e);
+            Toast.makeText(this, "Error al guardar la puntuación", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Método para obtener la hora actual como String
+    private String getCurrentTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
     }
 
     // Método para iniciar el tablero de juego
@@ -509,35 +524,33 @@ public class game2048 extends AppCompatActivity {
     // Método para conseguir la puntuación máxima de la lista:
     private int conseguirMaximaPuntuacion() {
         int puntuacionMax = 0;
-
         for (int puntuacion : almacenarPuntuacion) {
             if (puntuacion > puntuacionMax) {
                 puntuacionMax = puntuacion;
             }
         }
-
         return puntuacionMax;
     }
 
-    // Método para llamar al dialogo de derrota;
+    // **Método para llamar al diálogo de derrota**
     private void dialagoDerrota() {
-        // Guardar estadísticas del juego en la base de datos:
-        saveGameStats();
-        
-        // Almacenamos la puntuacion antes de reiniciar:
-        almacenarPuntuacion.add(puntuacion);
+        // **Guardar la puntuación en la base de datos**
+        saveGameStats(idUsuarioActual, puntuacion);
 
+        // **Actualizar la puntuación máxima**
+        almacenarPuntuacion.add(puntuacion);
         maximaPuntuacion = conseguirMaximaPuntuacion();
+
+        // **Actualizar la UI**
         maximaPuntacionTextView.setText("Best: " + maximaPuntuacion);
 
-        // Dialogos:
+        // **Mostrar diálogo de derrota**
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("You have lost!").setMessage("Do you want to play again").setPositiveButton("OK", (dialog, which) -> {
-            // Reinicia el juego si le damos al boton "OK":
-            reiniciarJuego();
-        }).setCancelable(false);
-
-        builder.show();
+        builder.setTitle("You have lost!")
+                .setMessage("Do you want to play again?")
+                .setPositiveButton("OK", (dialog, which) -> reiniciarJuego())
+                .setCancelable(false)
+                .show();
     }
 
     // Método para almacenar el estado actual del tablero.

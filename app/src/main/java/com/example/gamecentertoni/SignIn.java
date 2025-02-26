@@ -44,6 +44,7 @@ public class SignIn extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_button);
         createAccount = findViewById(R.id.create_new_account);
 
+
         signInButton.setOnClickListener(v -> {
             String username = enterUser.getText().toString().trim();
             String password = enterPassword.getText().toString().trim();
@@ -64,8 +65,10 @@ public class SignIn extends AppCompatActivity {
                 // Guardar el estado del login
                 saveLoginState(username);
 
-                // Ir a la actividad de GameCenter
-                navigateToGameCenter();
+                if (isLoggedIn()) {
+                    navigateToGameCenter();
+                }
+
             } else {
                 Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show();
             }
@@ -85,10 +88,13 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void saveLoginState(String username) {
+        int userId = mDatabaseHelper.getUserIdByUsername(username);
+
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editorPreferences = sharedPreferences.edit();
 
         editorPreferences.putString(KEY_USERNAME, username);
+        editorPreferences.putInt("user_id", userId);
         editorPreferences.putBoolean(KEY_LOGGED_IN, true);
         editorPreferences.apply();
     }
@@ -99,7 +105,13 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void navigateToGameCenter() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String username = sharedPreferences.getString(KEY_USERNAME, "");
+        int userId = sharedPreferences.getInt("user_id", -1);
+
         Intent intent = new Intent(SignIn.this, GameCenter.class);
+        intent.putExtra("USERNAME", username);
+        intent.putExtra("USER_ID", userId);
         startActivity(intent);
 
         // Finalizar actividad actual:
